@@ -1,13 +1,15 @@
-var c = document.getElementById("myCanvas");
+
+
+ var c = document.getElementById("myCanvas");
 var ctx = c.getContext("2d");
 var img = document.getElementById("scream");
 ctx.drawImage(img, 0, 0);
 var imgData = ctx.getImageData(0, 0, c.width, c.height);
 
-//тут не использовала эту матрицу, но в целом умножалось на 1 все числа
-var nodes = [1, 1, 1,
-             1, 1, 1,
-             1, 1, 1];
+//маска гауса
+var Gause_mask = [1, 2, 1,
+              2, 4, 2,
+              1, 2, 1];
 // все пиксели матрицы которые изменяем в изображении
 var p1, p2, p3, 
     p4, p5, p6, 
@@ -41,10 +43,10 @@ var createNewPixel = function(imageD){
       p8 = imgData.getPixel(x+2,y+1);
       p9 = imgData.getPixel(x+2,y+2);
 
-      //делим на 9 для нормализации
-      newR = Math.floor((p1.R + p2.R + p3.R + p4.R + p5.R + p6.R + p7.R + p8.R + p9.R)/9);  
-      newG = Math.floor((p1.G + p2.G + p3.G + p4.G + p5.G + p6.G + p7.G + p8.G + p9.G)/9);
-      newB = Math.floor((p1.B + p2.B + p3.B + p4.B + p5.B + p6.B + p7.B + p8.B + p9.B)/9);
+      //умножаем на числа с матрицы, делим на 9 для нормализации
+      newR = Math.floor((p1.R + p2.R*2 + p3.R + p4.R*2 + p5.R*4 + p6.R*2 + p7.R + p8.R*2 + p9.R)/16);  
+      newG = Math.floor((p1.G + p2.G*2 + p3.G + p4.G*2 + p5.G*4 + p6.G*2 + p7.G + p8.G*2 + p9.G)/16);
+      newB = Math.floor((p1.B + p2.B*2 + p3.B + p4.B*2 + p5.B*4 + p6.B*2 + p7.B + p8.B*2 + p9.B)/16);
     
       newPixel = p5;
       newPixel.R = newR;
