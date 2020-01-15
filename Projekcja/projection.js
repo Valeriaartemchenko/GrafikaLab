@@ -65,8 +65,8 @@ var drawRectangle = function (x1, y1, sideLength){
 };
 
 var movePointX = function(rangeElement){
-  var x = 100; //чтобы был слева отступ 100 пикселей отнимаю от х1 100 пикселей и выходит координата 100
-  var projectionLength = 400; // отступ слева + длина стороны квадрата + отсуп справа
+  var x = 200; //чтобы был слева отступ 100 пикселей отнимаю от х1 100 пикселей и выходит координата 100
+  var projectionLength = 200; // отступ слева + длина стороны квадрата + отсуп справа
   if(slider.value >= 0 && slider.value <= 90){
     x = x + slider.value * (projectionLength/90);
   } else if (slider.value > 90 && slider.value <= 180) {
@@ -81,8 +81,8 @@ var movePointX = function(rangeElement){
 };
 
 var movePointY = function(rangeElement){
-  var y = 400; // чтобы был отступ 100 прибавляю к у1 координате 100 и выходит 300
-  var projectionLength = 400;
+  var y = 300; // чтобы был отступ 100 прибавляю к у1 координате 100 и выходит 300
+  var projectionLength = 200;
   if(slider.value >= 0 && slider.value <= 90){
     y = y;
   } else if (slider.value > 90 && slider.value <= 180) {
@@ -103,28 +103,13 @@ var getProjectionLength
 
 var drawProjectionDraft = function (x1, y1, sideLength){
   //drawRectangle(x1, y1, sideLength); //рисуем исходный квадрат
-  //потом рисуем линии которые соеденяют точки квадрата с точкой проекции 
-  /*
-  drawLine(x,y,x1,y1); // x1
-  drawLine(x,y,x1+sideLength,y1); // x2
-  drawLine(x,y, x1 + sideLength, y1- sideLength); //x3
-  drawLine(x,y,x1, y1- sideLength); //x4
-  */
-  drawLine((x+x1)/2,(y+y1)/2,x1,y1); // x1
-  drawLine((x+(x1+sideLength))/2,(y+y1)/2,x1+sideLength,y1); // x2
-  drawLine((x+(x1+sideLength))/2,(y+(y1- sideLength))/2, x1 + sideLength, y1- sideLength); //x3
-  drawLine((x+x1)/2,(y+(y1- sideLength))/2,x1, y1- sideLength); //x4
-  //рисую квадрат-проекцию по midpoints векторов
-  drawLine((x+x1)/2,(y+y1)/2,(x+(x1+sideLength))/2,(y+y1)/2);
-  drawLine((x+(x1+sideLength))/2,(y+y1)/2,(x+(x1+sideLength))/2,(y+(y1- sideLength))/2);
-  drawLine((x+(x1+sideLength))/2,(y+(y1- sideLength))/2,(x+x1)/2,(y+(y1- sideLength))/2);
-  drawLine((x+x1)/2,(y+(y1- sideLength))/2,(x+x1)/2,(y+y1)/2);
-  /*
-  (x+x1)/2,(y+y1)/2 // first midpoint
-  (x+(x1+sideLength))/2,(y+y1)/2 //second midpoint
-  (x+(x1+sideLength))/2,(y+(y1- sideLength))/2 //third
-  (x+x1)/2,(y+(y1- sideLength))/2 //fourth
-  */
+  //потом рисуем линии которые соеденяют точки квадрата с точками проекции 
+  drawRectangle(x,y,100);
+
+  drawLine(x,y,x1,y1);
+  drawLine(x+sideLength,y,x1+sideLength,y1);
+  drawLine(x, y- sideLength, x1, y1 - sideLength);
+  drawLine(x + sideLength, y -sideLength, x1 + sideLength, y1 -sideLength);
 };
 
 
@@ -133,7 +118,8 @@ slider.addEventListener('click', function (){
   y = movePointY(slider);
   //console.log(slider.value);
   clean();
-  drawRectangle(250,250,100) //рисую исходный квадрат
+  drawRectangle(250,250,100); //рисую исходный квадрат
+  drawRectangle(x,y,100);
   drawProjectionDraft(250,250,100);
 
 });
@@ -141,7 +127,6 @@ slider.addEventListener('click', function (){
 drawBtn.addEventListener('click', function(){
   //ctx.fillRect(x,y , 3, 3);
   drawRectangle(250,250,100) //рисую исходный квадрат
-  drawProjectionDraft(250,250,100); //потом рисуем линии которые соеденяют точки квадрата с точкой проекции 
 });
 
 cleanBtn.addEventListener('click', function(){
